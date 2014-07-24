@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="customers">
+<head>
+<meta charset="UTF-8">
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/style.css">
+<title>Customers</title>
+<script>
+	var customers = angular.module("customers", []);
+
+	customers.factory("CustomerFactory", function() {
+		var people = [
+			{name: "Michael Choi", created_at: new Date(2014, 3, 3)},
+			{name: "John Supsupin", created_at: new Date(2014, 3, 3)},
+			{name: "Trey Villafane", created_at: new Date(2014, 3, 1)},
+			{name: "India Meisner", created_at: new Date(2014, 2, 15)}
+		  ];
+
+		var factory = {};
+		factory.getCustomers = function() {
+			return people;
+		};
+		factory.addCustomer = function(data) {
+			people.push({
+				name: data,
+				created_at: new Date()
+			});
+		};
+		factory.removeCustomer = function(target) {
+			var index;
+			for (var i = 0; i < people.length; i++) {
+				if (target.name === people[i].name) {
+					index = i;
+				}
+			}
+			people.splice(index, 1);
+		}
+		return factory;
+	});
+
+	customers.controller("Controller1", function($scope, CustomerFactory) {
+		$scope.customers = CustomerFactory.getCustomers();
+
+		$scope.addCustomer = function() {
+			var dupe = false;
+			for (var i = 0; i < $scope.customers.length; i++) {
+				if ($scope.customers[i].name === $scope.new_customer) {
+					dupe = true;
+				}
+			};
+			if (dupe) {
+				alert("That customer is already present.");
+			}
+			else {
+				CustomerFactory.addCustomer($scope.new_customer);
+			}
+		};
+
+		$scope.removeCustomer = function(target) {
+			CustomerFactory.removeCustomer(target);
+		}
+	});
+</script>
+</head>
+<body ng-controller="Controller1">
+	<h3>Add a new customer</h3>
+	Customer Name: <input type="text" ng-model="new_customer">
+	<button ng-click="addCustomer()">Add</button>
+	<input type="text" ng-model="filter_customer" placeholder="search name...">
+	<table>
+		<thead>
+			<tr>
+				<th>Customer Name</th>
+				<th>Created Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="customer in customers | orderBy: 'created_at' | filter: filter_customer">
+				<td ng-bind="customer.name"></td>				
+				<td ng-bind="customer.created_at | date: 'MMMM d yyyy'"></td>
+				<td><button ng-click="removeCustomer(customer)">Remove</button></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

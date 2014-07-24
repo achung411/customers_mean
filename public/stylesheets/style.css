@@ -1,0 +1,39 @@
+h3 {
+	text-decoration: underline;
+}
+
+button {
+	background-color: blue;
+	color: white;
+}
+
+input:nth-child(4) {
+	display: block;
+	margin: 40px 0 20px 480px;
+}
+
+table {
+	border: 2px black solid;
+	border-collapse: collapse;
+}
+
+	thead {
+		border: 2px solid black;
+	}
+
+	th {
+		background-color: lightgray;
+		border: 1px white solid;
+		width: 200px;
+	}
+
+	td {
+		border: 1px silver solid;
+	}
+
+	table button {
+		background-color: red;
+		color: white;
+		margin: 0 80px;
+	}
+
